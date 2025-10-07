@@ -1,0 +1,9 @@
+# node module
+/node_modules
+# folder for image and video
+/videos
+# /images
+/private
+/generated
+# /src/dev.js
+.env

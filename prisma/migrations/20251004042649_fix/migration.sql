@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Post` MODIFY `typ01` VARCHAR(191) NULL;

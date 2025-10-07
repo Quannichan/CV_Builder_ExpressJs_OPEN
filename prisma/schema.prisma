@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String?
+  descript      String? @db.LongText
+  sex           Int @default(1) // 1 là nam, 2 là nữ
+  address       String?
+  job           String?
+  birthdate     DateTime? 
+  
+  portfolio     String?
+  twitter       String?
+  reddit        String?
+  github        String?
+  facebook      String?
+  mail          String? @unique
+  phone         String? @unique
+  linked        String?
+  
+  ava           String?
+  pass          String?
+  role          Int 
+  date01        DateTime? @default(now())
+  date02        DateTime?
+
+  accountType   Int? // 0 basic, 1 standard, 2 professional
+
+  posts     Post[]
+
+  Payment Payment[]
+
+  CV PostSample[]
+
+  SharedPosts SharedPosts[]
+}
+
+model SharedPosts {
+  userId Int
+  postId Int
+
+  user   User @relation(fields: [userId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+}
+
+model Post {
+  id       Int      @id @default(autoincrement())
+  iduser   Int
+  img      String?  @db.LongText
+  content  String?  @db.LongText
+  stat01   Int? // 1: private, 2 public, 3 share
+  typ01    String? // font
+  stat02   Int?
+  lang     String @default("vi")
+  date01   DateTime? @default(now())
+  date02   DateTime?
+  idSample Int
+
+  user     User?      @relation(fields: [iduser], references: [id])
+  PostSample PostSample @relation(fields: [idSample], references: [id])
+
+  SharedPosts SharedPosts[]
+}
+
+model PostSample{
+  id       Int      @id @default(autoincrement())
+  iduser   Int?
+  img      String?
+  name     String
+  descript String?
+  typ01    Json?
+  typ02    Json?
+  typ03    Json?
+  date01   DateTime? @default(now())
+  date02   DateTime?
+
+  used     Post[]
+  user     User?      @relation(fields: [iduser], references: [id])
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  iduser    Int
+  type      Int
+  amount    Int
+  data01    String   @db.LongText
+  status    Int
+  date01    DateTime @default(now())
+  date02    DateTime?
+
+  user      User     @relation(fields: [iduser], references: [id])
+}

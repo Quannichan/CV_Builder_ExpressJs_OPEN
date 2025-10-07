@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Post` ADD COLUMN `typ01` INTEGER NULL;
